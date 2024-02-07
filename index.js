@@ -48,6 +48,12 @@ async function run() {
             res.send(result);
         });
 
+        // get all products api
+        app.get('/products', async (req, res) => {
+            const result = await productsCollection.find().toArray();
+            res.send(result);
+        });
+
         // get all promocodes from db
         app.get('/promocodes', async (req, res) => {
             const result = await promoCodesCollection.find().toArray();
