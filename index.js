@@ -62,6 +62,25 @@ async function run() {
             res.send(result);
         });
 
+        // update promocode api
+        app.patch("/promocode/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedPromo = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    ...updatedPromo,
+                }
+            }
+            const result = await promoCodesCollection.updateOne(
+                filter,
+                updatedDoc,
+                options
+            );
+            res.send(result);
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You're successfully connected to MongoDB!");
