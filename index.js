@@ -30,7 +30,13 @@ async function run() {
         await client.connect();
 
         // Database collections
-        const usersCollection = client.db('zaynax_db').collection('products');
+        const productsCollection = client.db('zaynax_db').collection('products');
+
+        app.post('/products', async (req, res) => {
+            const newItem = req.body;
+            const result = await productsCollection.insertOne(newItem);
+            res.send(result);
+        });
 
 
         // Send a ping to confirm a successful connection
