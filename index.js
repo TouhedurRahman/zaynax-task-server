@@ -31,13 +31,22 @@ async function run() {
 
         // Database collections
         const productsCollection = client.db('zaynax_db').collection('products');
+        const promoCodesCollection = client.db('zaynax_db').collection('promocodes');
 
+        // add new products api
         app.post('/products', async (req, res) => {
             const newItem = req.body;
             const result = await productsCollection.insertOne(newItem);
             res.send(result);
         });
 
+        // add new promocodes api
+        app.post('/promocodes', async (req, res) => {
+            const newItem = req.body;
+            newItem.createdAt = new Date();
+            const result = await promoCodesCollection.insertOne(newItem);
+            res.send(result);
+        });
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
