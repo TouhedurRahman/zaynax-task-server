@@ -54,6 +54,14 @@ async function run() {
             res.send(result);
         });
 
+        // get single promocode api
+        app.get("/promocode/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await promoCodesCollection.findOne(query);
+            res.send(result);
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You're successfully connected to MongoDB!");
