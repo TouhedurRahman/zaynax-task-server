@@ -48,6 +48,12 @@ async function run() {
             res.send(result);
         });
 
+        // get all promocodes from db
+        app.get('/promocodes', async (req, res) => {
+            const result = await promoCodesCollection.find().toArray();
+            res.send(result);
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You're successfully connected to MongoDB!");
