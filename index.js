@@ -61,6 +61,12 @@ async function run() {
             res.send(result);
         });
 
+        // get all cart products api
+        app.get('/cart', async (req, res) => {
+            const result = await cartCollection.find().toArray();
+            res.send(result);
+        });
+
         // add new promocodes api
         app.post('/promocodes', async (req, res) => {
             const newItem = req.body;
