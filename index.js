@@ -32,6 +32,7 @@ async function run() {
         // Database collections
         const productsCollection = client.db('zaynax_db').collection('products');
         const cartCollection = client.db('zaynax_db').collection('cart');
+        const orderCollection = client.db('zaynax_db').collection('orders');
         const promoCodesCollection = client.db('zaynax_db').collection('promocodes');
 
         // add new products api
@@ -65,6 +66,16 @@ async function run() {
         app.get('/cart', async (req, res) => {
             const result = await cartCollection.find().toArray();
             res.send(result);
+        });
+
+        // insert orders and delete from cart api
+        app.post('/orders', async (req, res) => {
+            const product = req.body;
+            const insertResult = await orderCollection.insertOne(product);
+
+            const deleteResult = await cartCollection.deleteMany({});
+
+            res.send({ insertResult, deleteResult });
         });
 
         // add new promocodes api
