@@ -31,6 +31,7 @@ async function run() {
 
         // Database collections
         const productsCollection = client.db('zaynax_db').collection('products');
+        const cartCollection = client.db('zaynax_db').collection('cart');
         const promoCodesCollection = client.db('zaynax_db').collection('promocodes');
 
         // add new products api
@@ -40,17 +41,31 @@ async function run() {
             res.send(result);
         });
 
+        // get all products api
+        app.get('/products', async (req, res) => {
+            const result = await productsCollection.find().toArray();
+            res.send(result);
+        });
+
+        // send products to cart
+        app.post('/cart', async (req, res) => {
+            const product = req.body;
+            const existingProduct = await cartCollection.findOne({
+                productName: product.productName
+            });
+            if (existingProduct) {
+                res.status(400).json({ error: 'Product already exists in the cart' });
+                return;
+            }
+            const result = await cartCollection.insertOne(product);
+            res.send(result);
+        });
+
         // add new promocodes api
         app.post('/promocodes', async (req, res) => {
             const newItem = req.body;
             newItem.createdAt = new Date();
             const result = await promoCodesCollection.insertOne(newItem);
-            res.send(result);
-        });
-
-        // get all products api
-        app.get('/products', async (req, res) => {
-            const result = await productsCollection.find().toArray();
             res.send(result);
         });
 
