@@ -78,6 +78,12 @@ async function run() {
             res.send({ insertResult, deleteResult });
         });
 
+        // get all orders form db api
+        app.get('/orders', async (req, res) => {
+            const result = await orderCollection.find().toArray();
+            res.send(result);
+        })
+
         // add new promocodes api
         app.post('/promocodes', async (req, res) => {
             const newItem = req.body;
