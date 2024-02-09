@@ -92,6 +92,25 @@ async function run() {
             res.send(result);
         })
 
+        // update status in order api
+        app.patch("/order/:id", async (req, res) => {
+            const id = req.params.id;
+            const updatedStatus = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    ...updatedStatus,
+                }
+            }
+            const result = await orderCollection.updateOne(
+                filter,
+                updatedDoc,
+                options
+            );
+            res.send(result);
+        })
+
         // add new promocodes api
         app.post('/promocodes', async (req, res) => {
             const newItem = req.body;
